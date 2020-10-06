@@ -1,1 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
+.pcoded .pcoded-header .navbar-logo[logo-theme="theme1"] {
+    background-color: #ffffff !important; 
+}
+.pcoded .pcoded-navbar[navbar-theme="theme1"] .main-menu {
+    background-color: #838383;
+}
+.pcoded .pcoded-navbar[navbar-theme="theme1"] {
+    background: #838383;
+}
+.pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item>li.pcoded-trigger.active>a {
+    background: #3a3a3a;
+}
+.pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item>li.active:hover>a, .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item>li:hover>a {
+    background: #3a3a3a;
+    color: #dcdcdc;
+}
+.pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item li.pcoded-hasmenu .pcoded-submenu {
+    background-color: #444444;
+
+}
+.pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item .pcoded-hasmenu .pcoded-submenu li.active>a {
+    color: #dcdcdc;
+    background-color: #444444;
+}
+.feather{
+    color:rgb(70, 70, 70) !important;
+}
+.img-fluid {
+    height: 40px !important;
+}

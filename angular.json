@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "dbstoretia"
+    }
+  },
+  "defaultProject": "dbstoretia",
+  "cli": {
+    "analytics": "02d1f26c-4907-4369-82e7-1460796fa5dd"
+  }
 }
