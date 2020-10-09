@@ -12,6 +12,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "~9.1.9",
+    "@angular/cdk": "^10.2.4",
     "@angular/common": "~9.1.9",
     "@angular/compiler": "~9.1.9",
     "@angular/core": "~9.1.9",
@@ -19,6 +20,21 @@
     "@angular/platform-browser": "~9.1.9",
     "@angular/platform-browser-dynamic": "~9.1.9",
     "@angular/router": "~9.1.9",
+    "@swimlane/ngx-charts": "^16.0.0",
+    "core-js": "^2.5.1",
+    "d3": "^4.13.0",
+    "d3-array": "^1.2.1",
+    "d3-brush": "^1.0.4",
+    "d3-color": "^1.0.3",
+    "d3-force": "^1.1.0",
+    "d3-format": "^1.2.0",
+    "d3-hierarchy": "^1.1.5",
+    "d3-interpolate": "^1.1.5",
+    "d3-scale": "^1.0.6",
+    "d3-selection": "^1.1.0",
+    "d3-shape": "^1.2.0",
+    "d3-time-format": "^2.1.0",
+    "ngx-charts": "^3.0.2",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
@@ -41,6 +57,7 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~3.8.3"
+    "typescript": "~3.8.3",
+    "@angular/language-service": "~7.0.0"
   }
 }

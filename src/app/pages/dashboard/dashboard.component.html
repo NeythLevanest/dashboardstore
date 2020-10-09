@@ -4,6 +4,32 @@
             <div class="page-wrapper">
 
                 <div class="page-body">
+                    <div>
+                        <form ngNativeValidate [formGroup]="forma" (ngSubmit)="consultarTienda()" enctype="multipart/form-data">
+                            <div class="row">
+                               <div class="form-group col-xl-3 col-md-6">
+                                    <label for="controlSelectCategory">Selecciona Tienda</label>
+                                    <select  required formControlName="tienda" name="tienda" class="form-control" id="controlSelectTienda" placeholder="Selecciona una Tienda">
+                                        <option [value]="tienda.store" *ngFor="let tienda of tiendas">Tienda {{tienda.store}}</option>
+                                    </select>
+                                </div> 
+
+                                <div class="form-group col-xl-3 col-md-6">
+                                    <label for="controlSelectDateInit">Fecha Inicio</label>
+                                    <input formControlName="dateInit" name="dateInit" type="date" class="form-control" id="dateInit" placeholder="Fecha de Inicio">
+                                </div>
+
+                                <div class="form-group col-xl-3 col-md-6">
+                                    <label for="controlSelectDateInit">Fecha Fin</label>
+                                    <input formControlName="dateInit" name="dateInit" type="date" class="form-control" id="dateInit" placeholder="Fecha de Inicio">
+                                </div>
+
+                                <div class="modal-footer col-xl-3 col-md-6">
+                                    <button type="submit" class="btn btn-primary">Consultar</button>
+                                </div>
+                            </div>
+                        </form> 
+                    </div>
                     <div class="row">
                         <!-- task, page, download counter  start -->
                         <div class="col-xl-3 col-md-6">
@@ -11,8 +37,8 @@
                                 <div class="card-block">
                                     <div class="row align-items-end">
                                         <div class="col-8">
-                                            <h4 class="text-white">$30200</h4>
-                                            <h6 class="text-white m-b-0">All Earnings</h6>
+                                            <h4 class="text-white" *ngFor="let promedio of promediosTienda">$ {{promedio.avgsales.toFixed(2)}}</h4>
+                                            <h6 class="text-white m-b-0">Promedio de Ventas</h6>
                                         </div>
                                         <div class="col-4 text-right">
                                             <canvas id="update-chart-1" height="50"></canvas>
@@ -20,7 +46,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <p class="text-white m-b-0"><i class="feather icon-clock text-white f-14 m-r-10"></i>update : 2:15 am</p>
+                                    <p class="text-white m-b-0" *ngFor="let caract of caracteristicasA"><i class="feather icon-clock text-white f-14 m-r-10"></i>Tienda Tipo : {{caract.type}}</p>
                                 </div>
                             </div>
                         </div>
@@ -29,8 +55,8 @@
                                 <div class="card-block">
                                     <div class="row align-items-end">
                                         <div class="col-8">
-                                            <h4 class="text-white">290+</h4>
-                                            <h6 class="text-white m-b-0">Page Views</h6>
+                                            <h4 class="text-white" *ngFor="let des of tasaDesempleo">% {{des.avgunemploye.toFixed(2)}}</h4>
+                                            <h6 class="text-white m-b-0">Tasa de Desempleo</h6>
                                         </div>
                                         <div class="col-4 text-right">
                                             <canvas id="update-chart-2" height="50"></canvas>
@@ -38,7 +64,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <p class="text-white m-b-0"><i class="feather icon-clock text-white f-14 m-r-10"></i>update : 2:15 am</p>
+                                    <p class="text-white m-b-0" *ngFor="let des of tasaDesempleo"><i class="feather icon-clock text-white f-14 m-r-10"></i>Min: %{{des.min.toFixed(2)}} -  Max: %{{des.max.toFixed(2)}}</p>
                                 </div>
                             </div>
                         </div>
@@ -84,8 +110,8 @@
                         <div class="col-xl-9 col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>Sales Analytics</h5>
-                                    <span class="text-muted">For more details about usage, please refer <a href="https://www.amcharts.com/online-store/" target="_blank">amCharts</a> licences.</span>
+                                    <h5>Promedio de Ventas por Departamento </h5>
+                                    <span class="text-muted">Tienda TIA {{numTienda}} </span>
                                     <div class="card-header-right">
                                         <ul class="list-unstyled card-option">
                                             <li><i class="feather icon-maximize full-card"></i></li>
@@ -95,7 +121,9 @@
                                     </div>
                                 </div>
                                 <div class="card-block">
-                                    <div id="sales-analytics" style="height: 265px;"></div>
+                                    <div style="height: 265px;">
+                                        <app-promedios-departamento style="width: 200px !important;"></app-promedios-departamento>
+                                    </div>
                                 </div>
                             </div>
                         </div>
