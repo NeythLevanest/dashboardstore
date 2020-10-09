@@ -30,8 +30,15 @@ export class ServiciosService {
     return this.http.get(url);
   }
 
-  filtrarPromedioVentasByDeparment(tienda){
+  filtrarPromedioVentasByDeparment(tienda, dateInit, dateEnd){
+    if(dateInit == null){
+      dateInit = "";
+    }
+    else if(dateEnd == null){
+      dateEnd = "";
+    }
+    
     let url = URL_SERVICIOS.obtenerPromedioVentasByTienda;
-    return this.http.post(url,{"store": tienda,"date_init":"","date_end":""});
+    return this.http.post(url,{"store": tienda,"date_init": dateInit,"date_end": dateEnd});
   }
 }

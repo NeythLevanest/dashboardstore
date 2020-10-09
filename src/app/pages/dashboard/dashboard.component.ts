@@ -41,7 +41,9 @@ export class DashboardComponent implements OnInit {
     this.consultarTiendaDef();
     this.cargarTiendas();
     this.forma = new FormGroup({
-      tienda: new FormControl(null, Validators.required)
+      tienda: new FormControl(null, Validators.required),
+      dateInit: new FormControl(null, Validators.required),
+      dateEnd: new FormControl(null, Validators.required)
     });
   }
   cargarTiendas(){
@@ -55,7 +57,7 @@ export class DashboardComponent implements OnInit {
   }
   onChangedTienda(tienda){
     this.tiendaSelected = this.getSelectedCat(tienda);
-    this._serviciosServices.filtrarPromedioVentasByDeparment(this.tiendaSelected.store).subscribe(
+    this._serviciosServices.filtrarPromedioVentasByDeparment(this.tiendaSelected.store,"","").subscribe(
       (resp:any) =>{
         console.log(resp);
       }
@@ -65,12 +67,15 @@ export class DashboardComponent implements OnInit {
   }
   consultarTienda(){
     console.log(this.forma.valid)
+    console.log(this.forma.value.tienda)
+    console.log(this.forma.value.dateInit)
+    console.log(this.forma.value.dateEnd)
     this.promediosTienda = [];
     this.caracteristicasA = [];
     this.tasaDesempleo = [];
     this.promediosDepartamentos = [];
 
-    this._serviciosServices.filtrarPromedioVentasByDeparment(this.forma.value.tienda)
+    this._serviciosServices.filtrarPromedioVentasByDeparment(this.forma.value.tienda, this.forma.value.dateInit,this.forma.value.dateEnd)
     .subscribe(
       (resp:any) =>{
         this.promediosTienda = resp.tienda;
@@ -80,7 +85,7 @@ export class DashboardComponent implements OnInit {
       error => console.log(error)
     );
     this.numTienda=this.forma.value.tienda;
-    this.chartPD.consultarTienda(this.forma.value.tienda);
+    this.chartPD.consultarTienda(this.forma.value.tienda, this.forma.value.dateInit,this.forma.value.dateEnd);
    
     
     
@@ -99,7 +104,7 @@ export class DashboardComponent implements OnInit {
 
  
   consultarTiendaDef(){
-    this._serviciosServices.filtrarPromedioVentasByDeparment(1)
+    this._serviciosServices.filtrarPromedioVentasByDeparment(1,"","")
     .subscribe(
       (resp:any) =>{
         console.log(resp.tienda);

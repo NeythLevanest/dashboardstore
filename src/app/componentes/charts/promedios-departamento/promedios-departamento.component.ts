@@ -41,7 +41,7 @@ export class PromediosDepartamentoComponent implements OnInit{
    }
   
   ngOnInit(): void {
-    this.consultarTienda(1);
+    this.consultarTienda(1,"","");
   }
   onSelect(event) {
     console.log(event);
@@ -58,9 +58,9 @@ export class PromediosDepartamentoComponent implements OnInit{
     }
     return color;
   }
-  consultarTienda(tienda){
+  consultarTienda(tienda,dateInit,dateEnd){
     this.promedioDep = [];
-    this._serviciosServices.filtrarPromedioVentasByDeparment(tienda)
+    this._serviciosServices.filtrarPromedioVentasByDeparment(tienda,dateInit,dateEnd)
     .subscribe(
       (resp:any) =>{
         for(let departamento of resp.p_departamentos){
