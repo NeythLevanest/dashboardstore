@@ -34,7 +34,7 @@ export class ServiciosService {
     if(dateInit == null){
       dateInit = "";
     }
-    else if(dateEnd == null){
+    if(dateEnd == null){
       dateEnd = "";
     }
     
