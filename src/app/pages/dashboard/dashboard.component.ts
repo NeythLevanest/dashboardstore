@@ -7,6 +7,7 @@ import { PromediosDep } from '../../models/promediosdep.model';
 import { PromediosDesempleo } from '../../models/promediosdesempleo.model';
 import { PromediosDepartamentoComponent } from 'src/app/componentes/charts/promedios-departamento/promedios-departamento.component';
 import { ConsolodidadoVentasComponent } from '../../componentes/charts/consolodidado-ventas/consolodidado-ventas.component';
+import { PromediosCPI } from '../../models/promedioscpi.model';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -18,6 +19,7 @@ export class DashboardComponent implements OnInit {
   todosDias:String = "";
   forma: FormGroup;
   formaFiltroTotalesVentas: FormGroup;
+  formaMarkdowns: FormGroup;
   tiendas: Tiendas[];
   
   tiendaSelected: Tiendas;
@@ -30,7 +32,10 @@ export class DashboardComponent implements OnInit {
   promediosDepartamentos: PromediosDep[]=[];
   caracteristicasA: Tiendas[];
   tasaDesempleo: PromediosDesempleo[];
+  tasaCPI: PromediosCPI[];
   
+  markdownsList:Number[]=[1,2,3,4,5];
+  markdownsVentas:any[]=[];
   
 
   constructor(
@@ -44,30 +49,49 @@ export class DashboardComponent implements OnInit {
       let dateIn = new Date(group.controls[dateInit].value);
       let dateEn = new Date(group.controls[dateEnd].value);
      
-      if(dateEn >= dateIn && dateEn!=null){
+      if(dateEn >= dateIn){
         return null
       }
-      return{
-        rangoCorrecto: true
-      };
+      else if(dateIn != null && dateEn == null){
+        return null
+      }
+      else if(dateEn != null && dateIn == null){
+        return null
+      }
+      else if(dateEn == null && dateIn == null){
+        return null
+      }
+      else{
+        return{
+          rangoCorrecto: true
+        };
+      }
+      
     };
   }
 
   ngOnInit(): void {
     this.numTienda=1;
-    this.consultarTiendaDef();
-    this.cargarTiendas();
+    
     this.forma = new FormGroup({
       tienda: new FormControl(null, Validators.required),
       dateInit: new FormControl(null, Validators.required),
       dateEnd: new FormControl(null, Validators.required),
       feriado: new FormControl(null, Validators.required),
     }, {validators: this.validarRangoFechas('dateInit', 'dateEnd')});
+    
     this.formaFiltroTotalesVentas = new FormGroup({
       dateInit: new FormControl(null, Validators.required),
       dateEnd: new FormControl(null, Validators.required),
       feriado: new FormControl(null, Validators.required),
     }, {validators: this.validarRangoFechas('dateInit', 'dateEnd')});
+    
+    this.formaMarkdowns = new FormGroup({
+      markdown: new FormControl(null, Validators.required),
+    });
+    this.obtenerMarkdowns();
+    this.consultarTiendaDef();
+    this.cargarTiendas();
   }
 
 
@@ -82,16 +106,7 @@ export class DashboardComponent implements OnInit {
     )
    
   }
-  onChangedTienda(tienda){
-    this.tiendaSelected = this.getSelectedCat(tienda);
-    this._serviciosServices.filtrarPromedioVentasByDeparment(this.tiendaSelected.store,"","","").subscribe(
-      (resp:any) =>{
-        console.log(resp);
-      }
-    );
-    this.setCatFilter(true);
-    
-  }
+ 
   consultarTienda(){
     /*console.log(this.forma.valid)
     console.log(this.forma.value.tienda)
@@ -101,14 +116,16 @@ export class DashboardComponent implements OnInit {
     this.promediosTienda = [];
     this.caracteristicasA = [];
     this.tasaDesempleo = [];
+    this.tasaCPI = [];
     this.promediosDepartamentos = [];
-
+ 
     this._serviciosServices.filtrarPromedioVentasByDeparment(this.forma.value.tienda, this.forma.value.dateInit,this.forma.value.dateEnd,this.forma.value.feriado)
     .subscribe(
       (resp:any) =>{
         this.promediosTienda = resp.tienda;
         this.caracteristicasA = resp.caracteristicas;
         this.tasaDesempleo = resp.desempleo;
+        this.tasaCPI = resp.cpi
       },
       error => console.log(error)
     );
@@ -116,20 +133,18 @@ export class DashboardComponent implements OnInit {
     this.chartPD.consultarTienda(this.forma.value.tienda, this.forma.value.dateInit,this.forma.value.dateEnd,this.forma.value.feriado);
   }
 
+  
   filtrarResultadosVentasByDate(){
     this.chartTotalSales.filtrarVentasByStore(this.formaFiltroTotalesVentas.value.dateInit, this.formaFiltroTotalesVentas.value.dateEnd,this.formaFiltroTotalesVentas.value.feriado)
   }
 
-  generarColor(){
-    var simbolos, color;
-    simbolos = "0123456789ABCDEF";
-    color="#";
-    for( var i = 0; i<6; i++){
-      color = color + simbolos[Math.floor(Math.random()*16)];
-    }
-    return color;
+  obtenerTasa(avgcpi, maxcpi){
+    let tasa = avgcpi/maxcpi;
+    return tasa;
   }
- 
+
+
+  
 
  
   consultarTiendaDef(){
@@ -142,20 +157,69 @@ export class DashboardComponent implements OnInit {
         
         this.caracteristicasA = resp.caracteristicas;
         this.tasaDesempleo = resp.desempleo;
+        this.tasaCPI = resp.cpi;
       },
       error => console.log(error)
     );
     
     
   }
-  getSelectedCat(tiendaSelected: Tiendas): Tiendas {
-    return this.tiendas.find(tienda => tienda === tiendaSelected);
+
+  obtenerMarkdowns(){
+    this.markdownsVentas = [];
+    this._serviciosServices.cargarMarkdowns()
+    .subscribe(
+      (resp:any) =>{
+        this.obtenerDatosFormateados(resp)
+      },
+      error => console.log(error)
+    );
+    
+    
   }
-  setCatFilter(filter: boolean) {
-    this._serviciosServices.setSearchFilter(filter);
+  filtrarMarkdowns(){
+    this.markdownsVentas = [];
+    this._serviciosServices.filtrarMarkdowns(this.formaMarkdowns.value.markdown)
+    .subscribe(
+      (resp:any) =>{
+        this.obtenerDatosFormateados(resp)
+      },
+      error => console.log(error)
+    );
   }
 
-  getHora(){
-
+  calcularTasaMarkdown(avgsales,markdown){
+    var tasaMD = (markdown/(markdown+avgsales));
+    return tasaMD;
   }
+
+  obtenerDatosFormateados(data){
+    var markdowns = data.markdown;
+    markdowns.sort((a, b) => a.store - b.store);
+    console.log(markdowns);
+    for(let i=0; i < data.ventas.length; i++){
+      var dataMarkdowns = {store:"",avgsales:0, maxSale:0, minSale:0, markdown:0}
+      
+      if(data.ventas[i].store==markdowns[i].store){
+        dataMarkdowns.store = "Tienda N°" + data.ventas[i].store;
+        dataMarkdowns.avgsales = data.ventas[i].avgsales;
+        dataMarkdowns.maxSale = data.ventas[i].max;
+        dataMarkdowns.minSale = data.ventas[i].min;
+        dataMarkdowns.markdown = markdowns[i].markdown;
+      }
+      
+      this.markdownsVentas.push(dataMarkdowns);
+    }
+  }
+
+  generarColor(){
+    var simbolos, color;
+    simbolos = "0123456789ABCDEF";
+    color="#";
+    for( var i = 0; i<6; i++){
+      color = color + simbolos[Math.floor(Math.random()*16)];
+    }
+    return color;
+  }
+ 
 }

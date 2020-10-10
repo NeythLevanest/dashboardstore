@@ -89,8 +89,8 @@
                                 <div class="card-block">
                                     <div class="row align-items-end">
                                         <div class="col-8">
-                                            <h4 class="text-white">145</h4>
-                                            <h6 class="text-white m-b-0">Task Completed</h6>
+                                            <h4 class="text-white" *ngFor="let cpi of tasaCPI">% {{obtenerTasa(cpi.avgcpi, cpi.max).toFixed(2)}}</h4>
+                                            <h6 class="text-white m-b-0">Tasa CPI Promedio</h6>
                                         </div>
                                         <div class="col-4 text-right">
                                             <canvas id="update-chart-3" height="50"></canvas>
@@ -98,7 +98,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <p class="text-white m-b-0"><i class="feather icon-clock text-white f-14 m-r-10"></i>update : 2:15 am</p>
+                                    <p class="text-white m-b-0" *ngFor="let cpi of tasaCPI"><i class="feather icon-clock text-white f-14 m-r-10"></i>Min: %{{cpi.min}} -  Max: %{{cpi.max}}</p>
                                 </div>
                             </div>
                         </div>
@@ -195,9 +195,9 @@
                 
                                                 <div class="form-group col-xl-3 col-md-6">
                                                     <label for="controlSelectDateInit">Fecha Fin</label>
-                                                    <input min="2010-02-05" formControlName="dateEnd" name="dateEnd" type="date" class="form-control" id="dateEnd" placeholder="Fecha de Inicio">
+                                                    <input min="2010-02-05" formControlName="dateEnd" name="dateEnd" type="date" class="form-control" id="dateEnd" placeholder="Fecha de Fin">
                                                 </div>
-                                                
+
                                                 <div class="form-group col-xl-3 col-md-6">
                                                     <label for="controlSelectCategory">Feriado</label>
                                                     <select formControlName="feriado" name="feriado" class="form-control" id="controlSelectFeriado">
@@ -224,11 +224,12 @@
                             </div>
                         </div>
                         <!--  total sales analytics store end-->
-
-                        <div class="col-xl-8 col-md-12">
+                        
+                        <!--  Comaprative markdowns analytics-->
+                        <div class="col-xl-12 col-md-12">
                             <div class="card table-card">
                                 <div class="card-header">
-                                    <h5>Application Sales</h5>
+                                    <h5>Comparativa de Markdowns y Afectación sobre las Ventas</h5>
                                     <div class="card-header-right">
                                         <ul class="list-unstyled card-option">
                                             <li><i class="feather icon-maximize full-card"></i></li>
@@ -238,191 +239,56 @@
                                     </div>
                                 </div>
                                 <div class="card-block">
+                                    <div>
+                                        <form ngNativeValidate [formGroup]="formaMarkdowns" (ngSubmit)="filtrarMarkdowns()" enctype="multipart/form-data">
+                                            <div class="row">
+                                                <div class="form-group col-xl-2 col-md-6"></div>
+                                                <div class="form-group col-xl-4 col-md-6">
+                                                    <label for="controlSelectCategory">Tipos de MarkDown</label>
+                                                    <select formControlName="markdown" name="markdown" class="form-control" id="controlSelectmarkdown">
+                                                        <option [value]="md" *ngFor="let md of markdownsList">Markdown {{md}}</option>
+                                                    </select>
+                                                </div> 
+                                                <div class="modal-footer col-xl-4 col-md-6">
+                                                    <button type="submit" class="btn btn-primary">Consultar</button>
+                                                </div>
+                                                <div class="form-group col-xl-2 col-md-6"></div>
+                                            </div>
+                                            
+                                        </form> 
+                                    </div>
+
                                     <div class="table-responsive">
                                         <table class="table table-hover  table-borderless">
                                             <thead>
                                                 <tr>
-                                                    <th>
-                                                        <div class="chk-option">
-                                                            <div class="checkbox-fade fade-in-primary">
-                                                                <label class="check-task">
-                                                                    <input type="checkbox" value="">
-                                                                    <span class="cr">
-                                                                        <i class="cr-icon feather icon-check txt-default"></i>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        Application</th>
-                                                    <th>Sales</th>
-                                                    <th>Change</th>
-                                                    <th>Avg Price</th>
-                                                    <th>Total</th>
+                                                    <th>Tiendas</th>
+                                                    <th>Ventas Promedio</th>
+                                                    <th>Markdown Promedio</th>
+                                                    <th>Tasa de Fuga</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <tr *ngFor="let md of markdownsVentas">
                                                     <td>
-                                                        <div class="chk-option">
-                                                            <div class="checkbox-fade fade-in-primary">
-                                                                <label class="check-task">
-                                                                    <input type="checkbox" value="">
-                                                                    <span class="cr">
-                                                                        <i class="cr-icon feather icon-check txt-default"></i>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
                                                         <div class="d-inline-block align-middle">
-                                                            <h6>Able Pro</h6>
-                                                            <p class="text-muted m-b-0">Powerful Admin Theme</p>
+                                                            <h6>{{md.store}}</h6>
+                                                            <p class="text-muted m-b-0">{{md.store}}</p>
                                                         </div>
                                                     </td>
-                                                    <td>16,300</td>
-                                                    <td><canvas id="app-sale1" height="50" width="100"></canvas></td>
-                                                    <td>$53</td>
-                                                    <td class="text-c-blue">$15,652</td>
+                                                    <td>{{md.avgsales.toFixed(2)}}</td>
+                                                    <td>{{md.markdown.toFixed(2)}}</td>
+                                                    <td class="text-c-blue">{{calcularTasaMarkdown(md.avgsales,md.markdown).toFixed(2)}}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="chk-option">
-                                                            <div class="checkbox-fade fade-in-primary">
-                                                                <label class="check-task">
-                                                                    <input type="checkbox" value="">
-                                                                    <span class="cr">
-                                                                        <i class="cr-icon feather icon-check txt-default"></i>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-inline-block align-middle">
-                                                            <h6>Photoshop</h6>
-                                                            <p class="text-muted m-b-0">Design Software</p>
-                                                        </div>
-                                                    </td>
-                                                    <td>26,421</td>
-                                                    <td><canvas id="app-sale2" height="50" width="100"></canvas></td>
-                                                    <td>$35</td>
-                                                    <td class="text-c-blue">$18,785</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="chk-option">
-                                                            <div class="checkbox-fade fade-in-primary">
-                                                                <label class="check-task">
-                                                                    <input type="checkbox" value="">
-                                                                    <span class="cr">
-                                                                        <i class="cr-icon feather icon-check txt-default"></i>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-inline-block align-middle">
-                                                            <h6>Guruable</h6>
-                                                            <p class="text-muted m-b-0">Best Admin Template</p>
-                                                        </div>
-                                                    </td>
-                                                    <td>8,265</td>
-                                                    <td><canvas id="app-sale3" height="50" width="100"></canvas></td>
-                                                    <td>$98</td>
-                                                    <td class="text-c-blue">$9,652</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="chk-option">
-                                                            <div class="checkbox-fade fade-in-primary">
-                                                                <label class="check-task">
-                                                                    <input type="checkbox" value="">
-                                                                    <span class="cr">
-                                                                        <i class="cr-icon feather icon-check txt-default"></i>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-inline-block align-middle">
-                                                            <h6>Flatable</h6>
-                                                            <p class="text-muted m-b-0">Admin App</p>
-                                                        </div>
-                                                    </td>
-                                                    <td>10,652</td>
-                                                    <td><canvas id="app-sale4" height="50" width="100"></canvas></td>
-                                                    <td>$20</td>
-                                                    <td class="text-c-blue">$7,856</td>
-                                                </tr>
+                                                
                                             </tbody>
                                         </table>
-                                        <div class="text-center">
-                                            <a href="#!" class=" b-b-primary text-primary">View all Projects</a>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-md-12">
-                            <div class="card user-activity-card">
-                                <div class="card-header">
-                                    <h5>User Activity</h5>
-                                </div>
-                                <div class="card-block">
-                                    <div class="row m-b-25">
-                                        <div class="col-auto p-r-0">
-                                            <div class="u-img">
-                                                <img src="..\files\assets\images\breadcrumb-bg.jpg" alt="user image" class="img-radius cover-img">
-                                                <img src="..\files\assets\images\avatar-2.jpg" alt="user image" class="img-radius profile-img">
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <h6 class="m-b-5">John Deo</h6>
-                                            <p class="text-muted m-b-0">Lorem Ipsum is simply dummy text.</p>
-                                            <p class="text-muted m-b-0"><i class="feather icon-clock m-r-10"></i>2 min ago</p>
-                                        </div>
-                                    </div>
-                                    <div class="row m-b-25">
-                                        <div class="col-auto p-r-0">
-                                            <div class="u-img">
-                                                <img src="..\files\assets\images\breadcrumb-bg.jpg" alt="user image" class="img-radius cover-img">
-                                                <img src="..\files\assets\images\avatar-2.jpg" alt="user image" class="img-radius profile-img">
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <h6 class="m-b-5">John Deo</h6>
-                                            <p class="text-muted m-b-0">Lorem Ipsum is simply dummy text.</p>
-                                            <p class="text-muted m-b-0"><i class="feather icon-clock m-r-10"></i>2 min ago</p>
-                                        </div>
-                                    </div>
-                                    <div class="row m-b-25">
-                                        <div class="col-auto p-r-0">
-                                            <div class="u-img">
-                                                <img src="..\files\assets\images\breadcrumb-bg.jpg" alt="user image" class="img-radius cover-img">
-                                                <img src="..\files\assets\images\avatar-2.jpg" alt="user image" class="img-radius profile-img">
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <h6 class="m-b-5">John Deo</h6>
-                                            <p class="text-muted m-b-0">Lorem Ipsum is simply dummy text.</p>
-                                            <p class="text-muted m-b-0"><i class="feather icon-clock m-r-10"></i>2 min ago</p>
-                                        </div>
-                                    </div>
-                                    <div class="row m-b-5">
-                                        <div class="col-auto p-r-0">
-                                            <div class="u-img">
-                                                <img src="..\files\assets\images\breadcrumb-bg.jpg" alt="user image" class="img-radius cover-img">
-                                                <img src="..\files\assets\images\avatar-2.jpg" alt="user image" class="img-radius profile-img">
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <h6 class="m-b-5">John Deo</h6>
-                                            <p class="text-muted m-b-0">Lorem Ipsum is simply dummy text.</p>
-                                            <p class="text-muted m-b-0"><i class="feather icon-clock m-r-10"></i>2 min ago</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="text-center">
-                                        <a href="#!" class="b-b-primary text-primary">View all Projects</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                         <!-- wather user -->
                         <div class="col-xl-6 col-md-12">

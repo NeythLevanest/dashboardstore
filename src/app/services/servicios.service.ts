@@ -63,5 +63,13 @@ export class ServiciosService {
     let url = URL_SERVICIOS.cargarVentasByStore;
     return this.http.post(url,{"date_init": dateInit,"date_end": dateEnd,"feriado":feriado});
   }
-  
+
+  cargarMarkdowns(){
+    let url = URL_SERVICIOS.obtenerMarkdownComparation;
+    return this.http.get(url);
+  }
+  filtrarMarkdowns(markdown){
+    let url = URL_SERVICIOS.obtenerMarkdownComparation;
+    return this.http.post(url,{"num_markdown": markdown});
+  }
 }
