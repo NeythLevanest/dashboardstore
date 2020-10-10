@@ -32,6 +32,9 @@ export class DashboardComponent implements OnInit {
   
 
   promediosTienda:Promedios[];
+  promedioVentaTienda:Promedios[]=[];
+  promediosGlobalVentasTienda:Promedios[]=[];
+  porcentajeVentasByFeriado:any[]=[];
   promediosDepartamentos: PromediosDep[]=[];
   caracteristicasA: Tiendas[];
   tasaDesempleo: PromediosDesempleo[];
@@ -116,7 +119,10 @@ export class DashboardComponent implements OnInit {
     console.log(this.forma.value.dateInit)
     console.log(this.forma.value.dateEnd)
     */
+    var porcentajeFeriado = {local:0, global:0}
+    
     this.promediosTienda = [];
+    this.porcentajeVentasByFeriado =[];
     this.caracteristicasA = [];
     this.tasaDesempleo = [];
     this.tasaCPI = [];
@@ -126,21 +132,31 @@ export class DashboardComponent implements OnInit {
     .subscribe(
       (resp:any) =>{
         this.promediosTienda = resp.tienda;
+        porcentajeFeriado.local = resp.tienda[0].avgsales;
+        
         this.caracteristicasA = resp.caracteristicas;
         this.tasaDesempleo = resp.desempleo;
         this.tasaCPI = resp.cpi
       },
       error => console.log(error)
     );
+    
+    this._serviciosServices.filtrarPromedioVentasByDeparment(this.forma.value.tienda, this.forma.value.dateInit,this.forma.value.dateEnd,"")
+    .subscribe(
+      (resp:any) =>{
+        porcentajeFeriado.global = resp.tienda[0].avgsales;
+      },
+      error => console.log(error)
+    );
+
+    this.porcentajeVentasByFeriado.push(porcentajeFeriado);
+
     this.numTienda=this.forma.value.tienda;
     this.chartPD.consultarTienda(this.forma.value.tienda, this.forma.value.dateInit,this.forma.value.dateEnd,this.forma.value.feriado);
-   
     this.historialChart.filtrarHistorialVentasByStore(this.forma.value.tienda,"","","");
   }
 
-  goToHistorial(){
-    
-  }
+  
   filtrarResultadosVentasByDate(){
     this.chartTotalSales.filtrarVentasByStore(this.formaFiltroTotalesVentas.value.dateInit, this.formaFiltroTotalesVentas.value.dateEnd,this.formaFiltroTotalesVentas.value.feriado)
   }
@@ -155,23 +171,33 @@ export class DashboardComponent implements OnInit {
 
  
   consultarTiendaDef(){
+    var porcentajeFeriado = {local:0, global:0}
+
     this._serviciosServices.filtrarPromedioVentasByDeparment(1,"","","")
     .subscribe(
       (resp:any) =>{
         /*console.log(resp.tienda);
         console.log(resp.p_departamentos);*/
         this.promediosTienda = resp.tienda;
-        
+        porcentajeFeriado.local = resp.tienda[0].avgsales;
+        porcentajeFeriado.global = resp.tienda[0].avgsales;
         this.caracteristicasA = resp.caracteristicas;
         this.tasaDesempleo = resp.desempleo;
         this.tasaCPI = resp.cpi;
+        console.log(this.promedioVentaTienda[0]);
       },
       error => console.log(error)
     );
-    
+    this.porcentajeVentasByFeriado.push(porcentajeFeriado);
+    this.carlcularPorcentajeVentasByFeriado(this.promedioVentaTienda, this.promediosGlobalVentasTienda);
     
   }
 
+  carlcularPorcentajeVentasByFeriado(promedioLocal, promedioGlobal){
+    var resultado = promedioLocal/promedioGlobal;
+    return resultado;
+ 
+}
   obtenerMarkdowns(){
     this.markdownsVentas = [];
     this._serviciosServices.cargarMarkdowns()

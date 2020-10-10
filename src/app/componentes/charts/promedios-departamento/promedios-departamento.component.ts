@@ -17,7 +17,7 @@ export class PromediosDepartamentoComponent implements OnInit{
   
   multi: any[];
   
-  view: any[] = [700, 400];
+  view: any[] = [1100, 400];
 
   // options
   showXAxis = true;
@@ -39,7 +39,7 @@ export class PromediosDepartamentoComponent implements OnInit{
     public _serviciosServices: ServiciosService
   ) {
     Object.assign(this,this.single)
-    this.view = [innerWidth / 1.9, 300];
+    this.view = [innerWidth / 1.4, 300];
    }
   
   ngOnInit(): void {
