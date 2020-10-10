@@ -162,7 +162,7 @@ export class DashboardComponent implements OnInit {
   }
 
   obtenerTasa(avgcpi, maxcpi){
-    let tasa = avgcpi/maxcpi;
+    var tasa = avgcpi/maxcpi;
     return tasa;
   }
 
@@ -194,8 +194,17 @@ export class DashboardComponent implements OnInit {
   }
 
   carlcularPorcentajeVentasByFeriado(promedioLocal, promedioGlobal){
-    var resultado = promedioLocal/promedioGlobal;
-    return resultado;
+    var simbolo = "+";
+    var tasa = promedioLocal/promedioGlobal;
+    if(tasa>=1){
+      tasa = tasa - 1;
+    }else{
+      simbolo = "-"
+      tasa = 1 - tasa;
+    }
+    var result = tasa.toFixed(2);
+    var resultText = result.toString()
+    return simbolo+resultText;
  
 }
   obtenerMarkdowns(){
