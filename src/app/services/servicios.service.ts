@@ -31,6 +31,7 @@ export class ServiciosService {
   }
 
   filtrarPromedioVentasByDeparment(tienda, dateInit, dateEnd, feriado){
+    localStorage.setItem('store',tienda);
     if(dateInit == null){
       dateInit = "";
     }
@@ -63,6 +64,20 @@ export class ServiciosService {
     let url = URL_SERVICIOS.cargarVentasByStore;
     return this.http.post(url,{"date_init": dateInit,"date_end": dateEnd,"feriado":feriado});
   }
+  filtrarHistorialVentasByDate(tienda,dateInit,dateEnd,feriado){
+    localStorage.setItem("store", tienda);
+    if(dateInit == null){
+      dateInit = "";
+    }
+    if(dateEnd == null){
+      dateEnd = "";
+    }
+    if(feriado == null || feriado == ""){
+      feriado = "";
+    }
+    let url = URL_SERVICIOS.obtenerHistorialVentas;
+    return this.http.post(url,{"store": tienda, "date_init": dateInit,"date_end": dateEnd,"feriado":feriado});
+  }
 
   cargarMarkdowns(){
     let url = URL_SERVICIOS.obtenerMarkdownComparation;
@@ -71,5 +86,9 @@ export class ServiciosService {
   filtrarMarkdowns(markdown){
     let url = URL_SERVICIOS.obtenerMarkdownComparation;
     return this.http.post(url,{"num_markdown": markdown});
+  }
+  cargarHistorialVentas(tienda){
+    let url = URL_SERVICIOS.obtenerHistorialVentas;
+    return this.http.post(url,{"store": tienda});
   }
 }

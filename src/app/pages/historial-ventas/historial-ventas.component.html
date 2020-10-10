@@ -1,0 +1,80 @@
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="page-wrapper">
+
+                <div class="page-body">
+                        <div class="col-xl-12 col-md-12">
+                            <h3>Historial de Ventas Tienda </h3>
+                        </div>
+
+                        <!--  sale analytics start -->
+                        <div class="col-xl-12 col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Historial de Ventas </h5>
+                                    <span class="text-muted">Tienda TIA  </span>
+                                    <div class="card-header-right">
+                                        <ul class="list-unstyled card-option">
+                                            <li><i class="feather icon-maximize full-card"></i></li>
+                                            <li><i class="feather icon-minus minimize-card"></i></li>
+                                            <li><i class="feather icon-trash-2 close-card"></i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-block">
+                                    <div>
+                                        <form ngNativeValidate [formGroup]="formaFiltroHistorialVentas" (ngSubmit)="filtrarResultadosHistorialByDate()" enctype="multipart/form-data">
+                                            <div class="row">
+                                                <div class="form-group col-xl-3 col-md-6">
+                                                    <label for="controlSelectCategory">Selecciona Tienda</label>
+                                                    <select  required formControlName="tienda" name="tienda" class="form-control" id="controlSelectTienda" placeholder="Selecciona una Tienda">
+                                                        <option [value]="tienda.store" *ngFor="let tienda of tiendas">Tienda {{tienda.store}}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-xl-3 col-md-6">
+                                                    <label for="controlSelectDateInit">Fecha Inicio</label>
+                                                    <input min="2010-02-05"formControlName="dateInit" name="dateInit" type="date" class="form-control" id="dateInit" placeholder="Fecha de Inicio">
+                                                </div>
+                
+                                                <div class="form-group col-xl-3 col-md-6">
+                                                    <label for="controlSelectDateInit">Fecha Fin</label>
+                                                    <input min="2010-02-05" formControlName="dateEnd" name="dateEnd" type="date" class="form-control" id="dateEnd" placeholder="Fecha de Fin">
+                                                </div>
+
+                                                <div class="form-group col-xl-3 col-md-6">
+                                                    <label for="controlSelectCategory">Feriado</label>
+                                                    <select formControlName="feriado" name="feriado" class="form-control" id="controlSelectFeriado">
+                                                        <option [value]="todosDias">Todos los Días</option>
+                                                        <option [value]="true">Solo Días Feriado</option>
+                                                        <option [value]="false">Solo Días No Feriado</option>
+                                                    </select>
+                                                </div> 
+                                                <div class="modal-footer col-xl-12 col-md-6">
+                                                    <button type="submit" class="btn btn-primary">Consultar</button>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" *ngIf="formaFiltroHistorialVentas.errors?.rangoCorrecto && !formaFiltroHistorialVentas.pristine">
+                                                <p class="text-danger">
+                                                    El rango de fecha ingresado es incorrecto
+                                                </p>
+                                            </div>
+                                        </form> 
+                                    </div>
+
+                                    <div>
+                                       <app-historial-ventas-chart></app-historial-ventas-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+            </div>
+
+           
+        </div>
+    </div>
+

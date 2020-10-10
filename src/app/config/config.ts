@@ -7,6 +7,6 @@ const URL_SERVICIOS = {
     cargarVentasByStore:URL_ROOT_AUTH+'/total_ventas_tiendas/',
     obtenerPromedioVentasByTienda:  URL_ROOT_AUTH+'/promedio_ventas_tienda/',
     obtenerMarkdownComparation:  URL_ROOT_AUTH+'/obtener_markdowns/', 
-   
+    obtenerHistorialVentas:  URL_ROOT_AUTH+'/historial_ventas/', 
 }
 export default URL_SERVICIOS

@@ -8,6 +8,7 @@ import { PromediosDesempleo } from '../../models/promediosdesempleo.model';
 import { PromediosDepartamentoComponent } from 'src/app/componentes/charts/promedios-departamento/promedios-departamento.component';
 import { ConsolodidadoVentasComponent } from '../../componentes/charts/consolodidado-ventas/consolodidado-ventas.component';
 import { PromediosCPI } from '../../models/promedioscpi.model';
+import { HistorialVentasChartComponent } from '../../componentes/charts/historial-ventas/historial-ventas.component';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -16,6 +17,8 @@ import { PromediosCPI } from '../../models/promedioscpi.model';
 export class DashboardComponent implements OnInit {
   @ViewChild(PromediosDepartamentoComponent) chartPD: PromediosDepartamentoComponent;
   @ViewChild(ConsolodidadoVentasComponent ) chartTotalSales: ConsolodidadoVentasComponent;
+  @ViewChild(HistorialVentasChartComponent) historialChart: HistorialVentasChartComponent;
+
   todosDias:String = "";
   forma: FormGroup;
   formaFiltroTotalesVentas: FormGroup;
@@ -131,9 +134,13 @@ export class DashboardComponent implements OnInit {
     );
     this.numTienda=this.forma.value.tienda;
     this.chartPD.consultarTienda(this.forma.value.tienda, this.forma.value.dateInit,this.forma.value.dateEnd,this.forma.value.feriado);
+   
+    this.historialChart.filtrarHistorialVentasByStore(this.forma.value.tienda,"","","");
   }
 
-  
+  goToHistorial(){
+    
+  }
   filtrarResultadosVentasByDate(){
     this.chartTotalSales.filtrarVentasByStore(this.formaFiltroTotalesVentas.value.dateInit, this.formaFiltroTotalesVentas.value.dateEnd,this.formaFiltroTotalesVentas.value.feriado)
   }

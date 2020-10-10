@@ -15,6 +15,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PromediosDepartamentoComponent } from './componentes/charts/promedios-departamento/promedios-departamento.component';
 import { ConsolodidadoVentasComponent } from './componentes/charts/consolodidado-ventas/consolodidado-ventas.component';
+import { HistorialVentasComponent } from './pages/historial-ventas/historial-ventas.component';
+import { HistorialVentasChartComponent } from './componentes/charts/historial-ventas/historial-ventas.component';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { ConsolodidadoVentasComponent } from './componentes/charts/consolodidado
     HeaderComponent,
     SidebarComponent,
     PromediosDepartamentoComponent,
-    ConsolodidadoVentasComponent
+    ConsolodidadoVentasComponent,
+    HistorialVentasComponent,
+    HistorialVentasChartComponent,
   ],
   imports: [
     BrowserModule,
