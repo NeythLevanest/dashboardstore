@@ -17,6 +17,8 @@ import { PromediosDepartamentoComponent } from './componentes/charts/promedios-d
 import { ConsolodidadoVentasComponent } from './componentes/charts/consolodidado-ventas/consolodidado-ventas.component';
 import { HistorialVentasComponent } from './pages/historial-ventas/historial-ventas.component';
 import { HistorialVentasChartComponent } from './componentes/charts/historial-ventas/historial-ventas.component';
+import { MarkdownspageComponent } from './pages/markdownspage/markdownspage.component';
+import { GlobalsalesComponent } from './pages/globalsales/globalsales.component';
 
 
 @NgModule({
@@ -29,6 +31,8 @@ import { HistorialVentasChartComponent } from './componentes/charts/historial-ve
     ConsolodidadoVentasComponent,
     HistorialVentasComponent,
     HistorialVentasChartComponent,
+    MarkdownspageComponent,
+    GlobalsalesComponent,
   ],
   imports: [
     BrowserModule,

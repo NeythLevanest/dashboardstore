@@ -1,0 +1,83 @@
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="page-wrapper">
+
+                <div class="page-body">
+                        <div class="col-xl-12 col-md-12">
+                            <h3>Comparativa de Markdowns</h3>
+                        </div>
+
+                        <div class="col-xl-12 col-md-12">
+                            <div class="card table-card">
+                                <div class="card-header">
+                                    <h5>Comparativa de Markdowns y Afectación sobre las Ventas</h5>
+                                    <div class="card-header-right">
+                                        <ul class="list-unstyled card-option">
+                                            <li><i class="feather icon-maximize full-card"></i></li>
+                                            <li><i class="feather icon-minus minimize-card"></i></li>
+                                            <li><i class="feather icon-trash-2 close-card"></i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-block">
+                                    <div>
+                                        <form ngNativeValidate [formGroup]="formaMarkdowns" (ngSubmit)="filtrarMarkdowns()" enctype="multipart/form-data">
+                                            <div class="row">
+                                                <div class="form-group col-xl-2 col-md-6"></div>
+                                                <div class="form-group col-xl-4 col-md-6">
+                                                    <label for="controlSelectCategory">Tipos de MarkDown</label>
+                                                    <select formControlName="markdown" name="markdown" class="form-control" id="controlSelectmarkdown">
+                                                        <option [value]="md" *ngFor="let md of markdownsList">Markdown {{md}}</option>
+                                                    </select>
+                                                </div> 
+                                                <div class="modal-footer col-xl-4 col-md-6">
+                                                    <button type="submit" class="btn btn-primary">Consultar</button>
+                                                </div>
+                                                <div class="form-group col-xl-2 col-md-6"></div>
+                                            </div>
+                                            
+                                        </form> 
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-hover  table-borderless">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tiendas</th>
+                                                    <th>Ventas Promedio</th>
+                                                    <th>Markdown Promedio</th>
+                                                    <th>Tasa de Fuga</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let md of markdownsVentas">
+                                                    <td>
+                                                        <div class="d-inline-block align-middle">
+                                                            <h6>{{md.store}}</h6>
+                                                            <p class="text-muted m-b-0">{{md.store}}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{md.avgsales.toFixed(2)}}</td>
+                                                    <td>{{md.markdown.toFixed(2)}}</td>
+                                                    <td class="text-c-blue">{{calcularTasaMarkdown(md.avgsales,md.markdown).toFixed(2)}}</td>
+                                                </tr>
+                                                
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--  Comaprative markdowns analytics-->
+                        
+
+                    </div>
+                </div>
+            </div>
+
+           
+        </div>
+    </div>
+
