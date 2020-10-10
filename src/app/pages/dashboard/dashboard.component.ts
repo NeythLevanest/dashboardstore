@@ -6,6 +6,7 @@ import { Promedios } from '../../models/promedios.model';
 import { PromediosDep } from '../../models/promediosdep.model';
 import { PromediosDesempleo } from '../../models/promediosdesempleo.model';
 import { PromediosDepartamentoComponent } from 'src/app/componentes/charts/promedios-departamento/promedios-departamento.component';
+import { ConsolodidadoVentasComponent } from '../../componentes/charts/consolodidado-ventas/consolodidado-ventas.component';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -13,8 +14,10 @@ import { PromediosDepartamentoComponent } from 'src/app/componentes/charts/prome
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(PromediosDepartamentoComponent) chartPD: PromediosDepartamentoComponent;
-
+  @ViewChild(ConsolodidadoVentasComponent ) chartTotalSales: ConsolodidadoVentasComponent;
+  todosDias:String = "";
   forma: FormGroup;
+  formaFiltroTotalesVentas: FormGroup;
   tiendas: Tiendas[];
   
   tiendaSelected: Tiendas;
@@ -35,6 +38,20 @@ export class DashboardComponent implements OnInit {
   ) { 
     
   }
+  
+  validarRangoFechas(dateInit: string, dateEnd: string){
+    return (group: FormGroup) =>{
+      let dateIn = new Date(group.controls[dateInit].value);
+      let dateEn = new Date(group.controls[dateEnd].value);
+     
+      if(dateEn >= dateIn && dateEn!=null){
+        return null
+      }
+      return{
+        rangoCorrecto: true
+      };
+    };
+  }
 
   ngOnInit(): void {
     this.numTienda=1;
@@ -43,13 +60,23 @@ export class DashboardComponent implements OnInit {
     this.forma = new FormGroup({
       tienda: new FormControl(null, Validators.required),
       dateInit: new FormControl(null, Validators.required),
-      dateEnd: new FormControl(null, Validators.required)
-    });
+      dateEnd: new FormControl(null, Validators.required),
+      feriado: new FormControl(null, Validators.required),
+    }, {validators: this.validarRangoFechas('dateInit', 'dateEnd')});
+    this.formaFiltroTotalesVentas = new FormGroup({
+      dateInit: new FormControl(null, Validators.required),
+      dateEnd: new FormControl(null, Validators.required),
+      feriado: new FormControl(null, Validators.required),
+    }, {validators: this.validarRangoFechas('dateInit', 'dateEnd')});
   }
+
+
+  
+
   cargarTiendas(){
     this._serviciosServices.cargarTiendas().subscribe(
       (resp:any) =>{
-        console.log(resp);
+        /*console.log(resp);*/
         this.tiendas = resp;
       }
     )
@@ -57,7 +84,7 @@ export class DashboardComponent implements OnInit {
   }
   onChangedTienda(tienda){
     this.tiendaSelected = this.getSelectedCat(tienda);
-    this._serviciosServices.filtrarPromedioVentasByDeparment(this.tiendaSelected.store,"","").subscribe(
+    this._serviciosServices.filtrarPromedioVentasByDeparment(this.tiendaSelected.store,"","","").subscribe(
       (resp:any) =>{
         console.log(resp);
       }
@@ -66,16 +93,17 @@ export class DashboardComponent implements OnInit {
     
   }
   consultarTienda(){
-    console.log(this.forma.valid)
+    /*console.log(this.forma.valid)
     console.log(this.forma.value.tienda)
     console.log(this.forma.value.dateInit)
     console.log(this.forma.value.dateEnd)
+    */
     this.promediosTienda = [];
     this.caracteristicasA = [];
     this.tasaDesempleo = [];
     this.promediosDepartamentos = [];
 
-    this._serviciosServices.filtrarPromedioVentasByDeparment(this.forma.value.tienda, this.forma.value.dateInit,this.forma.value.dateEnd)
+    this._serviciosServices.filtrarPromedioVentasByDeparment(this.forma.value.tienda, this.forma.value.dateInit,this.forma.value.dateEnd,this.forma.value.feriado)
     .subscribe(
       (resp:any) =>{
         this.promediosTienda = resp.tienda;
@@ -85,10 +113,11 @@ export class DashboardComponent implements OnInit {
       error => console.log(error)
     );
     this.numTienda=this.forma.value.tienda;
-    this.chartPD.consultarTienda(this.forma.value.tienda, this.forma.value.dateInit,this.forma.value.dateEnd);
-   
-    
-    
+    this.chartPD.consultarTienda(this.forma.value.tienda, this.forma.value.dateInit,this.forma.value.dateEnd,this.forma.value.feriado);
+  }
+
+  filtrarResultadosVentasByDate(){
+    this.chartTotalSales.filtrarVentasByStore(this.formaFiltroTotalesVentas.value.dateInit, this.formaFiltroTotalesVentas.value.dateEnd,this.formaFiltroTotalesVentas.value.feriado)
   }
 
   generarColor(){
@@ -104,11 +133,11 @@ export class DashboardComponent implements OnInit {
 
  
   consultarTiendaDef(){
-    this._serviciosServices.filtrarPromedioVentasByDeparment(1,"","")
+    this._serviciosServices.filtrarPromedioVentasByDeparment(1,"","","")
     .subscribe(
       (resp:any) =>{
-        console.log(resp.tienda);
-        console.log(resp.p_departamentos);
+        /*console.log(resp.tienda);
+        console.log(resp.p_departamentos);*/
         this.promediosTienda = resp.tienda;
         
         this.caracteristicasA = resp.caracteristicas;

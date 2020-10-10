@@ -30,15 +30,38 @@ export class ServiciosService {
     return this.http.get(url);
   }
 
-  filtrarPromedioVentasByDeparment(tienda, dateInit, dateEnd){
+  filtrarPromedioVentasByDeparment(tienda, dateInit, dateEnd, feriado){
     if(dateInit == null){
       dateInit = "";
     }
     if(dateEnd == null){
       dateEnd = "";
     }
-    
+    if(feriado == null || feriado == ""){
+      feriado = "";
+    }
+    console.log(feriado);
     let url = URL_SERVICIOS.obtenerPromedioVentasByTienda;
-    return this.http.post(url,{"store": tienda,"date_init": dateInit,"date_end": dateEnd});
+    return this.http.post(url,{"store": tienda,"date_init": dateInit,"date_end": dateEnd,"feriado":feriado});
   }
+
+  cargarVentasByStore(){
+    let url = URL_SERVICIOS.cargarVentasByStore;
+    return this.http.get(url);
+  }
+
+  filtrarVentasByDate(dateInit, dateEnd, feriado){
+    if(dateInit == null){
+      dateInit = "";
+    }
+    if(dateEnd == null){
+      dateEnd = "";
+    }
+    if(feriado == null || feriado == ""){
+      feriado = "";
+    }
+    let url = URL_SERVICIOS.cargarVentasByStore;
+    return this.http.post(url,{"date_init": dateInit,"date_end": dateEnd,"feriado":feriado});
+  }
+  
 }

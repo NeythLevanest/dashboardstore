@@ -4,6 +4,7 @@ const URL_SERVICIOS = {
     usuarios: URL_ROOT+'/usuarios/',
     //login : URL_ROOT +'auth/',
     cargarTiendas:  URL_ROOT_AUTH+'/tiendas/',
+    cargarVentasByStore:URL_ROOT_AUTH+'/total_ventas_tiendas/',
     obtenerPromedioVentasByTienda:  URL_ROOT_AUTH+'/promedio_ventas_tienda/',
     
 

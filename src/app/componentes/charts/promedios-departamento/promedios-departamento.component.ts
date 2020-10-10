@@ -11,7 +11,7 @@ import { ServiciosService } from 'src/app/services/servicios.service';
 })
 export class PromediosDepartamentoComponent implements OnInit{
 
-  promedioDep:[]=[];
+  promedioDep:PromediosDep[]=[];
   
   single: any[];
   
@@ -33,6 +33,8 @@ export class PromediosDepartamentoComponent implements OnInit{
     domain: [] 
   };
 
+
+
   constructor(
     public _serviciosServices: ServiciosService
   ) {
@@ -41,7 +43,7 @@ export class PromediosDepartamentoComponent implements OnInit{
    }
   
   ngOnInit(): void {
-    this.consultarTienda(1,"","");
+    this.consultarTienda(1,"","","");
   }
   onSelect(event) {
     console.log(event);
@@ -58,21 +60,23 @@ export class PromediosDepartamentoComponent implements OnInit{
     }
     return color;
   }
-  consultarTienda(tienda,dateInit,dateEnd){
+  consultarTienda(tienda,dateInit,dateEnd,feriado){
     this.promedioDep = [];
-    this._serviciosServices.filtrarPromedioVentasByDeparment(tienda,dateInit,dateEnd)
+    this._serviciosServices.filtrarPromedioVentasByDeparment(tienda,dateInit,dateEnd,feriado)
     .subscribe(
       (resp:any) =>{
         for(let departamento of resp.p_departamentos){
-          let dep = {name:Number, value:Number}
+          /*console.log("Hola");*/
+          
+          var dep = {name:0, value:0}
           dep.name = departamento.departamento;
-          dep.value =departamento.avgsales;
+          dep.value = departamento.avgsales;
           this.promedioDep.push(dep);
           this.colorScheme.domain.push(this.generarColor());
         }
         this.single=this.promedioDep;
         this.single.sort((a, b) => a.name - b.name);
-        console.log(this.single);
+        /*console.log(this.single);*/
   
       },
       error => console.log(error)
