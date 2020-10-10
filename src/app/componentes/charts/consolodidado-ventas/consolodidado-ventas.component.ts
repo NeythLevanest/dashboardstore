@@ -66,6 +66,12 @@ export class ConsolodidadoVentasComponent implements OnInit {
     );
     
   }
+  /*
+  *Funcion para filtrar el Consolidado de ventas en acuerdo a los filtros del form respectivo
+  *@dateIn: fecha inicio de busqueda
+  *@dateEnd: fecha fin de busqueda
+  *@feriado: condicion para buscar por feriado o no
+  */
   filtrarVentasByStore(dateInit,dateEnd,feriado){
     this.totalVentasByStore = [];
     this._serviciosServices.filtrarVentasByDate(dateInit,dateEnd,feriado)

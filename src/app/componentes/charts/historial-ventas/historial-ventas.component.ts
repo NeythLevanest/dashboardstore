@@ -83,6 +83,8 @@ export class HistorialVentasChartComponent implements OnInit {
     );
     
   }*/
+
+  /*Funcion para inicializar chart con datos por defecto */
   initChart(){
     var tienda = localStorage.getItem("store");
     if(tienda != ""){
@@ -91,6 +93,14 @@ export class HistorialVentasChartComponent implements OnInit {
       this.filtrarHistorialVentasByStore(1,"","","");
     }
   }
+
+  /*
+  *Funcion para filtrar el historial de ventas en acuerdo a los filtros del form respectivo
+  *@store: numero de la tienda
+  *@dateIn: fecha inicio de busqueda
+  *@dateEnd: fecha fin de busqueda
+  *@feriado: condicion para buscar por feriado o no
+  */
   filtrarHistorialVentasByStore(store,dateInit,dateEnd,feriado){
     this.listTotalVentas = [];
     this._serviciosServices.filtrarHistorialVentasByDate(store,dateInit,dateEnd,feriado)
@@ -104,6 +114,10 @@ export class HistorialVentasChartComponent implements OnInit {
     );
     
   }
+  /*
+  *Funcion para formatear los datos y generar diccionario para el chart
+  *@data: data obtenida del api
+  */
   obtenerDatosFormateados(data){
     this.totalVentasByStore = {name:"", series:[]}
     var store = {name:"", series:[]}

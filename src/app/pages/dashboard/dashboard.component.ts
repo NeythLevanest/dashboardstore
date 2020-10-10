@@ -50,6 +50,11 @@ export class DashboardComponent implements OnInit {
     
   }
   
+  /*
+  *Funcion para validad rangos de fechas en el formulario de filtros
+  *@dateInit: Fecha de de partida
+  *@dateInit: Fecha de de fin
+  */
   validarRangoFechas(dateInit: string, dateEnd: string){
     return (group: FormGroup) =>{
       let dateIn = new Date(group.controls[dateInit].value);
@@ -75,7 +80,10 @@ export class DashboardComponent implements OnInit {
       
     };
   }
-
+  
+  /*
+  *Metodo de inicializacion global de componentes, funciones y objetos de la aplicacion
+  */
   ngOnInit(): void {
     this.numTienda=1;
     
@@ -102,7 +110,9 @@ export class DashboardComponent implements OnInit {
 
 
   
-
+  /*
+  *Funcion para obtener el listado de las tiendas disponibles
+  */
   cargarTiendas(){
     this._serviciosServices.cargarTiendas().subscribe(
       (resp:any) =>{
@@ -113,6 +123,12 @@ export class DashboardComponent implements OnInit {
    
   }
  
+  /*
+  *Funcion para obtener los promedios por tienda y departamentos, relacionados con ventas,cpi
+   caracteristicas de la tienda y servicio para filtro, ademas invoca a funciones de los componentes
+   tipo chart, chartDP, chartHistorial
+  *@Recibe como argumentos los parametos o campos del formulario forma
+  */
   consultarTienda(){
     /*console.log(this.forma.valid)
     console.log(this.forma.value.tienda)
@@ -156,11 +172,20 @@ export class DashboardComponent implements OnInit {
     this.historialChart.filtrarHistorialVentasByStore(this.forma.value.tienda,"","","");
   }
 
+   /*
+  *Funcion para obtener totales de ventas
+  *@Invoca al la funcion filtrar ventas del componente charttotalsales
+  */
   
   filtrarResultadosVentasByDate(){
     this.chartTotalSales.filtrarVentasByStore(this.formaFiltroTotalesVentas.value.dateInit, this.formaFiltroTotalesVentas.value.dateEnd,this.formaFiltroTotalesVentas.value.feriado)
   }
 
+  /*
+  *Funcion para obtener la tasa de conversion entre cpi promedio y el cpi maximo
+  *@avgcpi: CPI promedio
+  *@avgcpi: CPI maximo
+  */
   obtenerTasa(avgcpi, maxcpi){
     var tasa = avgcpi/maxcpi;
     return tasa;
@@ -168,8 +193,9 @@ export class DashboardComponent implements OnInit {
 
 
   
-
- 
+ /*
+  *Funcion para obtener la informacion de KPIs y promedios por defecto de la tienda 1
+  */
   consultarTiendaDef(){
     var porcentajeFeriado = {local:0, global:0}
 
@@ -193,6 +219,11 @@ export class DashboardComponent implements OnInit {
     
   }
 
+  /*
+  *Funcion para calcular la tasa de propocionalidad de conversion de ventas promedio en feriado o no
+  *@promediolocal: promedio aplicando filtro de feriado
+  *@promedioglobal: promedio total sin aplicar filtro de feriado
+  */
   carlcularPorcentajeVentasByFeriado(promedioLocal, promedioGlobal){
     var simbolo = "+";
     var tasa = promedioLocal/promedioGlobal;
@@ -207,6 +238,10 @@ export class DashboardComponent implements OnInit {
     return simbolo+resultText;
  
 }
+
+   /*
+  *Funcion para obtener la los tipos de markdowns, por defecto el primero
+  */
   obtenerMarkdowns(){
     this.markdownsVentas = [];
     this._serviciosServices.cargarMarkdowns()
@@ -216,9 +251,11 @@ export class DashboardComponent implements OnInit {
       },
       error => console.log(error)
     );
-    
-    
   }
+
+  /*
+  *Funcion para filtrar los tipos de markdowns
+  */
   filtrarMarkdowns(){
     this.markdownsVentas = [];
     this._serviciosServices.filtrarMarkdowns(this.formaMarkdowns.value.markdown)
@@ -229,11 +266,21 @@ export class DashboardComponent implements OnInit {
       error => console.log(error)
     );
   }
-
+  
+  /*
+  *Funcion para calcular la tasa de conversion de descuentos aplicados y cuanta fuga de dinero representa
+  *@avgsales: promedio de ventas por tienda
+  *@markdown: promedio de markdowns por tipo 
+  */
   calcularTasaMarkdown(avgsales,markdown){
     var tasaMD = (markdown/(markdown+avgsales));
     return tasaMD;
   }
+
+  /*
+  *Funcion para formatear datos y generar diccionario para tabla de markdowns
+  *@datos: recibe la respuesta la api
+  */
 
   obtenerDatosFormateados(data){
     var markdowns = data.markdown;
@@ -253,7 +300,10 @@ export class DashboardComponent implements OnInit {
       this.markdownsVentas.push(dataMarkdowns);
     }
   }
-
+ 
+  /*
+  *Funcion para generar un color aleatorio para los charts
+  */
   generarColor(){
     var simbolos, color;
     simbolos = "0123456789ABCDEF";
