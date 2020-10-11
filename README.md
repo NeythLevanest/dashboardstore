@@ -10,9 +10,10 @@ It is composed of historical sales data for 45 stores located in different regio
 
 
 ## Requirements
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.7.
 node v12.18.3
 all libraries in package.json
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.7.
+
 
 ## Development server
 
